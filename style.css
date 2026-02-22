@@ -14,8 +14,9 @@ body {
 
 #feedbackDisplay {
     margin-top: 10px;
-    font-size: 18px;
-    min-height: 24px;
+    font-size: 20px;
+    font-weight: bold;
+    min-height: 24px; /* prevents layout jump */
 }
 
 #progress {
