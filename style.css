@@ -1,36 +1,22 @@
 body {
-  font-family: sans-serif;
+  font-family: Arial, sans-serif;
   text-align: center;
-  background-size: cover;
-  background-position: center;
-  background-color: #f8f8f8;
+  margin: 30px;
 }
 
-header {
-  margin: 20px;
+#noteDisplay svg {
+  width: 200px;
+  height: 150px;
+  margin-top: 20px;
 }
 
-#noteDisplay {
-  margin-top: 50px;
-  font-size: 48px;
+#startBtn {
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 #progress {
   margin-top: 20px;
   font-size: 20px;
-}
-
-/* CSS button */
-#startBtn {
-  border: none;
-  border-radius: 12px;
-  padding: 15px 30px;
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-
-#startBtn:hover {
-  transform: scale(1.05);
 }
