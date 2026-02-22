@@ -11,9 +11,9 @@ let currentNote = null;
 let tier = 1;
 let totalNotes = 10; // notes per level
 let correctCount = 0;
-let waitingForNote = false; // NEW: flag to wait for note
+let waitingForNote = false; // Wait for user to play
 
-// Tier Notes
+// Tier Notes (piano notes only)
 const tier1Notes = ["A", "B", "C", "D", "E", "F", "G"];
 const tier2Notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
 
@@ -27,11 +27,12 @@ themeSelect.onchange = () => {
 
 // START LEVEL
 startBtn.onclick = async () => {
-  tier = parseInt(tierSelect.value); // 1 or 2
+  tier = parseInt(tierSelect.value);
   correctCount = 0;
   pickRandomNote(tier);
   progressDisplay.innerText = `Progress: 0/${totalNotes}`;
 
+  // Initialize microphone once
   if (!audioContext) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     try {
@@ -54,12 +55,9 @@ startBtn.onclick = async () => {
 
 // PICK RANDOM NOTE
 function pickRandomNote(tier) {
-  waitingForNote = true; // wait for user to play
-  if(tier === 1) {
-    currentNote = tier1Notes[Math.floor(Math.random() * tier1Notes.length)];
-  } else {
-    currentNote = tier2Notes[Math.floor(Math.random() * tier2Notes.length)];
-  }
+  waitingForNote = true; // Wait until the student plays
+  if(tier === 1) currentNote = tier1Notes[Math.floor(Math.random() * tier1Notes.length)];
+  else currentNote = tier2Notes[Math.floor(Math.random() * tier2Notes.length)];
   noteDisplay.innerText = `🎵 Play: ${currentNote}`;
 }
 
@@ -67,28 +65,29 @@ function pickRandomNote(tier) {
 function detectPitch() {
   analyser.getFloatTimeDomainData(dataArray);
 
+  // Measure amplitude of microphone input
   let max = 0;
   for (let i = 0; i < dataArray.length; i++) {
     if (Math.abs(dataArray[i]) > max) max = Math.abs(dataArray[i]);
   }
 
-  // Only give feedback if waiting for note AND sound is detected
+  // Only respond if waiting for note AND sound is above threshold
   if (waitingForNote && max > 0.05) {
-    waitingForNote = false; // prevent multiple feedbacks for same note
-    const detectedNote = simulateDetectedNote(); // placeholder for real pitch
+    waitingForNote = false; // prevent multiple feedbacks
+    const detectedNote = simulatePianoNote(); // only piano notes
     checkAnswer(detectedNote);
   }
 
   requestAnimationFrame(detectPitch);
 }
 
-// SIMULATE DETECTED NOTE (for testing without real pitch detection)
-function simulateDetectedNote() {
+// SIMULATE DETECTED PIANO NOTE (placeholder for real pitch detection)
+function simulatePianoNote() {
   const allNotes = tier === 1 ? tier1Notes : tier2Notes;
   return allNotes[Math.floor(Math.random() * allNotes.length)];
 }
 
-// CHECK CORRECT/INCORRECT
+// CHECK CORRECT / INCORRECT
 function checkAnswer(detectedNote) {
   if(detectedNote === currentNote) {
     noteDisplay.innerText = `✅ Correct! (${currentNote})`;
@@ -96,7 +95,7 @@ function checkAnswer(detectedNote) {
     progressDisplay.innerText = `Progress: ${correctCount}/${totalNotes}`;
 
     if(correctCount < totalNotes) {
-      setTimeout(() => pickRandomNote(tier), 1000); // show next note after 1s
+      setTimeout(() => pickRandomNote(tier), 1000); // next note after 1s
     } else {
       noteDisplay.innerText = `🎉 Level Complete!`;
     }
