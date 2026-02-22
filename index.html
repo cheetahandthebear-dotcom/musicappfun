@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🎹 Music App</h1>
+
+    <!-- Theme selection -->
+    <label for="themeSelect">Theme:</label>
+    <select id="themeSelect">
+      <option value="dinosaur">Dinosaur</option>
+      <option value="butterfly">Butterfly</option>
+    </select>
+
+    <!-- Tier selection -->
+    <label for="tierSelect">Tier:</label>
+    <select id="tierSelect">
+      <option value="1">Tier 1 - Letters</option>
+      <option value="2">Tier 2 - Staff Notation</option>
+    </select>
+  </header>
+
+  <main>
+    <button id="startBtn">Start Level</button>
+    <div id="progress">Progress: 0%</div>
+    <div id="noteDisplay">🎵 Waiting for piano input...</div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

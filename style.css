@@ -1,0 +1,36 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-color: #f8f8f8;
+}
+
+header {
+  margin: 20px;
+}
+
+#noteDisplay {
+  margin-top: 50px;
+  font-size: 48px;
+}
+
+#progress {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+/* CSS button */
+#startBtn {
+  border: none;
+  border-radius: 12px;
+  padding: 15px 30px;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+#startBtn:hover {
+  transform: scale(1.05);
+}
