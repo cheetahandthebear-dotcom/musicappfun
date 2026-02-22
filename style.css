@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+    padding: 0;
+}
+
+#noteDisplay svg {
+    width: 90%;
+    max-width: 350px;
+    height: auto;
+    margin-top: 20px;
+}
+
+#feedbackDisplay {
+    margin-top: 10px;
+    font-size: 18px;
+    min-height: 24px;
+}
+
+#progress {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+#startBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+select#tierSelect {
+    font-size: 16px;
+    padding: 5px;
+}
