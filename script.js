@@ -11,6 +11,7 @@ let currentNote = null;
 let tier = 1;
 let totalNotes = 10; // notes per level
 let correctCount = 0;
+let waitingForNote = false; // NEW: flag to wait for note
 
 // Tier Notes
 const tier1Notes = ["A", "B", "C", "D", "E", "F", "G"];
@@ -20,7 +21,6 @@ const tier2Notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
 themeSelect.onchange = () => {
   const theme = themeSelect.value;
   document.body.style.backgroundImage = `url(assets/themes/${theme}/background.png)`;
-
   if(theme === "dinosaur") startBtn.style.backgroundColor = "#8B4513";
   if(theme === "butterfly") startBtn.style.backgroundColor = "#FFB6C1";
 };
@@ -54,15 +54,16 @@ startBtn.onclick = async () => {
 
 // PICK RANDOM NOTE
 function pickRandomNote(tier) {
+  waitingForNote = true; // wait for user to play
   if(tier === 1) {
     currentNote = tier1Notes[Math.floor(Math.random() * tier1Notes.length)];
-  } else if(tier === 2) {
+  } else {
     currentNote = tier2Notes[Math.floor(Math.random() * tier2Notes.length)];
   }
   noteDisplay.innerText = `🎵 Play: ${currentNote}`;
 }
 
-// PLACEHOLDER PITCH DETECTION
+// PITCH DETECTION LOOP
 function detectPitch() {
   analyser.getFloatTimeDomainData(dataArray);
 
@@ -71,15 +72,17 @@ function detectPitch() {
     if (Math.abs(dataArray[i]) > max) max = Math.abs(dataArray[i]);
   }
 
-  if (max > 0.05) { // sound detected
-    const detectedNote = simulateDetectedNote();
+  // Only give feedback if waiting for note AND sound is detected
+  if (waitingForNote && max > 0.05) {
+    waitingForNote = false; // prevent multiple feedbacks for same note
+    const detectedNote = simulateDetectedNote(); // placeholder for real pitch
     checkAnswer(detectedNote);
   }
 
   requestAnimationFrame(detectPitch);
 }
 
-// PLACEHOLDER: simulate detected note randomly for testing
+// SIMULATE DETECTED NOTE (for testing without real pitch detection)
 function simulateDetectedNote() {
   const allNotes = tier === 1 ? tier1Notes : tier2Notes;
   return allNotes[Math.floor(Math.random() * allNotes.length)];
@@ -93,11 +96,12 @@ function checkAnswer(detectedNote) {
     progressDisplay.innerText = `Progress: ${correctCount}/${totalNotes}`;
 
     if(correctCount < totalNotes) {
-      setTimeout(() => pickRandomNote(tier), 1000);
+      setTimeout(() => pickRandomNote(tier), 1000); // show next note after 1s
     } else {
       noteDisplay.innerText = `🎉 Level Complete!`;
     }
   } else {
     noteDisplay.innerText = `❌ Incorrect! Try again (${currentNote})`;
+    waitingForNote = true; // allow retry until correct
   }
 }
